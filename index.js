@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 
-const notes = [
+const persons = [
   {
     id: 1,
     name: 'Arto Hellas',
@@ -25,7 +25,27 @@ const notes = [
 ]
 
 app.get('/api/persons', (req, res) => {
-  res.json(notes).status(200).end()
+  res.json(persons).status(200).end()
+})
+
+app.get('/info', (req, res) => {
+  const entries = persons.length
+  const currentDate = new Date().toLocaleDateString('en-gb',
+    {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    }
+  )
+
+  console.log(currentDate)
+  res.send(`<p>Phonebook has info for ${entries} people<p/>
+    <br/>
+    ${currentDate}
+    `)
 })
 
 const PORT = 3001
