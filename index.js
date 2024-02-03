@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 const persons = [
   {
     id: 1,
@@ -24,6 +26,17 @@ const persons = [
   }
 ]
 
+const generateId = (number) => {
+  if (persons.length > 0) {
+    const max = Math.floor(number)
+    const min = Math.ceil(Math.max(...persons.map(person => person.id)) + 1)
+
+    const id = Math.floor(Math.random() * (max - min) + min)
+    return id
+  }
+
+  return 0
+}
 app.get('/api/persons', (req, res) => {
   res.json(persons).status(200).end()
 })
@@ -41,7 +54,6 @@ app.get('/info', (req, res) => {
     }
   )
 
-  console.log(currentDate)
   res.send(`<p>Phonebook has info for ${entries} people<p/>
     <br/>
     ${currentDate}
@@ -73,6 +85,27 @@ app.delete('/api/persons/:id', (req, res) => {
   } else {
     res.status(404).end()
   }
+})
+
+app.post('/api/persons', (req, res) => {
+  const { name, number } = req.body
+
+  if (!name || !number) {
+    return res.status(400).json({
+      error: 'content missing'
+    })
+  } else if (persons.find((person) => person.name === name)) {
+    return res.status(400).json({
+      error: 'name must be unique'
+    })
+  }
+
+  const id = generateId(Number(number))
+  res.json({
+    id,
+    name,
+    number
+  }).status(201).end()
 })
 
 const PORT = 3001
