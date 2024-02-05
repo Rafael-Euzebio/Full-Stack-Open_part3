@@ -3,6 +3,7 @@ const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
+app.use(express.static('dist'))
 
 app.use(morgan(function (tokens, req, res) {
   return [
@@ -48,6 +49,7 @@ const generateId = (number) => {
 
   return 0
 }
+
 app.get('/api/persons', (req, res) => {
   res.json(persons).status(200).end()
 })
