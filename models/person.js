@@ -1,3 +1,4 @@
+require('dotenv').config()
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 
@@ -20,7 +21,7 @@ personSchema.set('toJSON', {
   transform: (document, returnedPerson) => {
     returnedPerson.id = returnedPerson._id.toString()
     delete returnedPerson._id
-    delete returnedPerson._v
+    delete returnedPerson.__v
   }
 })
 
