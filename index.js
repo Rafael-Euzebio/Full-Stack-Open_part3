@@ -52,18 +52,16 @@ app.post('/api/persons', (req, res) => {
     return res.status(400).json({
       error: 'content missing'
     })
-  } else if (persons.find((person) => person.name === name)) {
-    return res.status(400).json({
-      error: 'name must be unique'
-    })
   }
 
-  const id = generateId(Number(number))
-  res.json({
-    id,
+  const person = new Person({
     name,
     number
-  }).status(201).end()
+  })
+
+  person.save().then((result) => {
+    res.json(result)
+  })
 })
 
 const PORT = process.env.PORT || 3001
