@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
+const Person = require('./models/person')
 
 app.use(express.json())
 app.use(express.static('dist'))
@@ -16,7 +17,9 @@ app.use(morgan(function (tokens, req, res) {
 }))
 
 app.get('/api/persons', (req, res) => {
-  res.json(persons).status(200).end()
+  Person.find({}).then((persons) => {
+    res.json(persons)
+  })
 })
 
 app.get('/info', (req, res) => {
