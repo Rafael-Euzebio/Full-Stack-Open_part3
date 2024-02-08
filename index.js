@@ -15,47 +15,11 @@ app.use(morgan(function (tokens, req, res) {
   ].join(' ')
 }))
 
-const persons = [
-  {
-    id: 1,
-    name: 'Arto Hellas',
-    number: '040-123456'
-  },
-  {
-    id: 2,
-    name: 'Ada Lovelace',
-    number: '39-44-5323523'
-  },
-  {
-    id: 3,
-    name: 'Dan Abramov',
-    number: '12-43-234345'
-  },
-  {
-    id: 4,
-    name: 'Mary Poppendieck',
-    number: '39-23-6423122'
-  }
-]
-
-const generateId = (number) => {
-  if (persons.length > 0) {
-    const max = Math.floor(number)
-    const min = Math.ceil(Math.max(...persons.map(person => person.id)) + 1)
-
-    const id = Math.floor(Math.random() * (max - min) + min)
-    return id
-  }
-
-  return 0
-}
-
 app.get('/api/persons', (req, res) => {
   res.json(persons).status(200).end()
 })
 
 app.get('/info', (req, res) => {
-  const entries = persons.length
   const currentDate = new Date().toLocaleDateString('en-gb',
     {
       weekday: 'long',
@@ -67,37 +31,15 @@ app.get('/info', (req, res) => {
     }
   )
 
-  res.send(`<p>Phonebook has info for ${entries} people<p/>
-    <br/>
-    ${currentDate}
-    `)
+  res.send(`${currentDate}`)
 })
 
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-
-  const person = persons.find((person) => {
-    return person.id === id
-  })
-
-  if (person) {
-    res.json(person)
-  } else {
-    res.status(404).end()
-  }
+  res.status(202).end()
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const person = persons.find((person) => {
-    return person.id === id
-  })
-
-  if (person) {
-    res.status(204).end()
-  } else {
-    res.status(404).end()
-  }
+  res.status(202)
 })
 
 app.post('/api/persons', (req, res) => {
