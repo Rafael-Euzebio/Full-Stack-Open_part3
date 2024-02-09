@@ -94,6 +94,21 @@ app.post('/api/persons', (req, res) => {
   })
 })
 
+app.put('/api/persons/:id', (req, res) => {
+  const { id, number } = req.body
+
+  if (!id || !number) {
+    return res.status(400).json({
+      error: 'data missing'
+    })
+  }
+
+  Person.findByIdAndUpdate(id, { number })
+    .then(person => {
+      res.json(person)
+    })
+})
+
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
