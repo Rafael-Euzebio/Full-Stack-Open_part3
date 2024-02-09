@@ -21,7 +21,7 @@ const personSchema = new Schema({
     type: String,
     validate: {
       validator: (v) => {
-        return /^([0-9]{3}|[0-9]{3}-)[0-9]{3}-[0-9]{4}$/.test(v)
+        return /^(([0-9]{3})|([0-9]{2}))-([0-9]{6})$/.test(v)
       },
       message: 'Phone number must be in one of the following formats: 09-1234556 or 040-22334455'
     }
