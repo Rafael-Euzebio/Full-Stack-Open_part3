@@ -26,13 +26,17 @@ const errorHandler = (error, req, res, next) => {
   next(error)
 }
 
-app.get('/api/persons', (req, res) => {
-  Person.find({}).then((persons) => {
-    res.json(persons)
-  })
+app.get('/api/persons', (req, res, next) => {
+  Person.find({})
+    .then((persons) => {
+      res.json(persons)
+    })
+    .catch(error => {
+      next(error)
+    })
 })
 
-app.get('/info', (req, res) => {
+app.get('/info', (req, res, next) => {
   const currentDate = new Date().toLocaleDateString('en-gb',
     {
       weekday: 'long',
@@ -44,7 +48,13 @@ app.get('/info', (req, res) => {
     }
   )
 
-  res.send(`${currentDate}`)
+  Person.countDocuments({})
+    .then(result => {
+      res.send(`<p>The phonebook has ${result} entries </p> <br> ${currentDate}`)
+    })
+    .catch(error => {
+      next(error)
+    })
 })
 
 app.get('/api/persons/:id', (req, res, next) => {
@@ -75,7 +85,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
     })
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const { name, number } = req.body
 
   if (!name || !number) {
@@ -89,12 +99,16 @@ app.post('/api/persons', (req, res) => {
     number
   })
 
-  person.save().then((result) => {
-    res.json(result)
-  })
+  person.save()
+    .then((result) => {
+      res.json(result)
+    })
+    .catch(error => {
+      next(error)
+    })
 })
 
-app.put('/api/persons/:id', (req, res) => {
+app.put('/api/persons/:id', (req, res, next) => {
   const { id, number } = req.body
 
   if (!id || !number) {
@@ -106,6 +120,9 @@ app.put('/api/persons/:id', (req, res) => {
   Person.findByIdAndUpdate(id, { number }, { returnDocument: 'after' })
     .then(person => {
       res.json(person)
+    })
+    .catch(error => {
+      next(error)
     })
 })
 
