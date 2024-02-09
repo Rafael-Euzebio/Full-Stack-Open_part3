@@ -80,7 +80,7 @@ app.post('/api/persons', (req, res) => {
 
   if (!name || !number) {
     return res.status(400).json({
-      error: 'content missing'
+      error: 'data missing'
     })
   }
 
