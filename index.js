@@ -16,6 +16,16 @@ app.use(morgan(function (tokens, req, res) {
   ].join(' ')
 }))
 
+const errorHandler = (error, req, res, next) => {
+  console.log(error.message)
+
+  if (error.name === 'CastError') {
+    return res.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
 app.get('/api/persons', (req, res) => {
   Person.find({}).then((persons) => {
     res.json(persons)
@@ -63,6 +73,8 @@ app.post('/api/persons', (req, res) => {
     res.json(result)
   })
 })
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
