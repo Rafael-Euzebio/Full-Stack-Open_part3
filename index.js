@@ -47,8 +47,18 @@ app.get('/info', (req, res) => {
   res.send(`${currentDate}`)
 })
 
-app.get('/api/persons/:id', (req, res) => {
-  res.status(202).end()
+app.get('/api/persons/:id', (req, res, next) => {
+  Person.findById(req.params.id)
+    .then(person => {
+      if (person) {
+        res.json(person)
+      } else {
+        res.status(404).end()
+      }
+    })
+    .catch(error => {
+      next(error)
+    })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
