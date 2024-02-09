@@ -103,7 +103,7 @@ app.put('/api/persons/:id', (req, res) => {
     })
   }
 
-  Person.findByIdAndUpdate(id, { number })
+  Person.findByIdAndUpdate(id, { number }, { returnDocument: 'after' })
     .then(person => {
       res.json(person)
     })
